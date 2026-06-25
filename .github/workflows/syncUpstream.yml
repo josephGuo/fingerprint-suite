@@ -16,7 +16,7 @@ jobs:
     - name: Checkout target repo
       uses: actions/checkout@v6
       with:
-        token: ${{ github.token }} # 使用你刚才设置的 Secret
+        token: ${{ secrets.GITHUB_TOKEN }} # 使用你刚才设置的 Secret
     
     # 第二步：运行同步 Action
     - name: Sync upstream changes
@@ -30,6 +30,8 @@ jobs:
         upstream_repo_access_token: ${{ secrets.GITHUB_TOKEN }}
         # 策略设置
         test_mode: false # 设为 true 可以测试而不实际推送
+        exclude_sync_paths: |
+          .github/workflows/
       
     # 第三步：检查同步结果（可选）
     - name: Check for errors
