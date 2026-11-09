@@ -23,9 +23,7 @@ import {
 } from 'vitest';
 
 function getHTTPBinUrl() {
-    return process.env.APIFY_HTTPBIN_TOKEN
-        ? `https://httpbin.apify.actor/get?token=${process.env.APIFY_HTTPBIN_TOKEN}`
-        : 'https://httpbin.org/get';
+    return 'https://httpbin.apify.actor/get';
 }
 
 const cases = [
@@ -565,8 +563,11 @@ describe('FingerprintInjector', () => {
 
                     await page.goto('https://hide.me/en/webrtc-leak-test');
                     await setTimeout(5000);
-                    const ok = await page.$('.o-pagecheck__alert--ok');
-                    expect(ok).toBeFalsy();
+                    const state = await page.$eval(
+                        '[data-webrtc-status]',
+                        (el: any) => el.dataset.state,
+                    );
+                    expect(state).toBe('leak');
 
                     browser.close();
                 });
@@ -584,8 +585,11 @@ describe('FingerprintInjector', () => {
 
                     await page.goto('https://hide.me/en/webrtc-leak-test');
                     await setTimeout(5000);
-                    const ok = await page.$('.o-pagecheck__alert--ok');
-                    expect(ok).toBeFalsy();
+                    const state = await page.$eval(
+                        '[data-webrtc-status]',
+                        (el: any) => el.dataset.state,
+                    );
+                    expect(state).toBe('leak');
 
                     browser.close();
                 });
@@ -603,8 +607,11 @@ describe('FingerprintInjector', () => {
 
                     await page.goto('https://hide.me/en/webrtc-leak-test');
                     await setTimeout(5000);
-                    const ok = await page.$('.o-pagecheck__alert--ok');
-                    expect(ok).toBeTruthy();
+                    const state = await page.$eval(
+                        '[data-webrtc-status]',
+                        (el: any) => el.dataset.state,
+                    );
+                    expect(state).not.toBe('leak');
 
                     browser.close();
                 });
